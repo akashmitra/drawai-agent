@@ -1,0 +1,159 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.title {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.buttons button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.buttons button svg {
+  margin-right: 5px;
+}
+
+.dndflow {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  height: calc(100vh - 60px); /* Subtract header height */
+  overflow: hidden;
+}
+
+.dndflow aside {
+  width: 200px;
+  border-right: 1px solid #e0e0e0;
+  padding: 15px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.dndflow aside .description {
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.dndflow .dndnode {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  background-color: #f9f9f9;
+}
+
+.dndflow .dndnode svg {
+  margin-right: 10px;
+}
+
+.reactflow-wrapper {
+  flex-grow: 1;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  contain: layout style paint;
+  will-change: transform;
+}
+
+.custom-node {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 8px 15px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+  max-width: 200px;
+  /* Prevent layout shifts */
+  box-sizing: border-box;
+  position: relative;
+  contain: layout style paint;
+  will-change: transform;
+}
+
+.node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.node-header svg {
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+.edit-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+.label-container {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.node-label-input {
+  border: none;
+  background-color: #f0f2f5;
+  padding: 2px 5px;
+  border-radius: 3px;
+  width: 100%;
+  min-width: 80px;
+  font-size: inherit;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.node-label-text {
+  min-width: 80px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: text;
+}
+
+.reactflow-wrapper .react-flow__minimap {
+    background-color: #f0f2f5;
+    border: 1px solid #e0e0e0;
+}
+
+.reactflow-wrapper .react-flow__controls {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
