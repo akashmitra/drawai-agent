@@ -18,14 +18,26 @@ import CustomNode from './CustomNode';
 const initialNodes = [
   {
     id: '1',
-    type: 'custom',
+    type: 'CustomNode',
     data: { label: 'Input', icon: <FaArrowCircleRight /> },
     position: { x: 250, y: 5 },
+  },
+  {
+    id: '2',
+    type: 'CustomNode',
+    data: { label: 'This is a very long process name that will wrap to multiple lines', icon: <FaCog /> },
+    position: { x: 250, y: 150 },
+  },
+  {
+    id: '3',
+    type: 'CustomNode',
+    data: { label: 'Output', icon: <FaArrowCircleLeft /> },
+    position: { x: 250, y: 300 },
   },
 ];
 
 const nodeTypes = {
-  custom: CustomNode,
+  CustomNode: CustomNode,
 };
 
 const iconMap = {
@@ -169,6 +181,7 @@ const App = () => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             fitView
+            nodeTypes = {nodeTypes}
             fitViewOptions={{ maxZoom: 1 }}
             deleteKeyCode={['Backspace', 'Delete']}
           >

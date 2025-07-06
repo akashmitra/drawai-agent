@@ -13,21 +13,21 @@ const Sidebar = () => {
       <div className="description">Drag nodes to the canvas</div>
       <div
         className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'custom', { label: 'Input', icon: 'FaArrowCircleRight' })}
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Input', icon: 'FaArrowCircleRight' })}
         draggable
       >
         <FaArrowCircleRight /> Input
       </div>
       <div
         className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'custom', { label: 'Default', icon: 'FaCog' })}
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Process', icon: 'FaCog' })}
         draggable
       >
-        <FaCog /> Default
+        <FaCog /> Process
       </div>
       <div
         className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'custom', { label: 'Output', icon: 'FaArrowCircleLeft' })}
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Output', icon: 'FaArrowCircleLeft' })}
         draggable
       >
         <FaArrowCircleLeft /> Output

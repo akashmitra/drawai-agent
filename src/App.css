@@ -39,8 +39,9 @@
 
 .custom-node {
   width: 200px;
-  height: 60px;
-  overflow: hidden;
+  min-height: 60px;
+  height: auto;
+  overflow: visible;
 }
 .node-label-input, .node-label-text {
   width: 100%;
