@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Handle } from 'reactflow';
 import { FaEdit } from 'react-icons/fa';
 
-const CustomNode = ({ data, id, onNodeLabelChange }) => {
+const CustomNode = ({ data, id, onNodeLabelChange, selected }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [label, setLabel] = useState(data.label);
   const inputRef = useRef(null);
@@ -45,7 +45,7 @@ const CustomNode = ({ data, id, onNodeLabelChange }) => {
   };
 
   return (
-    <div className="custom-node">
+    <div className={`custom-node ${selected ? 'selected-node' : ''}`}>
       <div className="node-header">
         {data.icon}
         <div className="label-container">
@@ -63,7 +63,7 @@ const CustomNode = ({ data, id, onNodeLabelChange }) => {
             <span onDoubleClick={startEditing} className="node-label-text">{label}</span>
           )}
         </div>
-        <FaEdit onClick={startEditing} className="edit-icon" />
+        {/* <FaEdit onClick={startEditing} className="edit-icon" /> */}
       </div>
       {data.label !== 'Output' && <Handle type="source" position="bottom" />}
       {data.label !== 'Input' && <Handle type="target" position="top" />}
