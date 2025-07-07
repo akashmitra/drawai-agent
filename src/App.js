@@ -14,6 +14,7 @@ import { FaArrowCircleRight, FaArrowCircleLeft, FaCog } from 'react-icons/fa';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import CustomNode from './CustomNode';
+import useNodeStore from './store';
 
 const initialNodes = [
   {
@@ -51,6 +52,8 @@ const App = () => {
   const [edges, setEdges] = useEdgesState([]);
   const copiedNodesRef = useRef([]);
   const { screenToFlowPosition, getNodes, setNodes: setFlowNodes, setEdges: setFlowEdges } = useReactFlow();
+  const setNodeNames = useNodeStore((state) => state.setNodeNames);
+  const nodeNames = useNodeStore((state) => state.nodeNames);
 
   // const onNodeLabelChange = useCallback((id, newLabel) => {
   //   setNodes((nds) =>
@@ -92,6 +95,10 @@ const App = () => {
     }
   }, [setFlowNodes, setFlowEdges]);
 
+  const onExport = useCallback(() => {
+    console.log(JSON.stringify(nodeNames));
+  }, [nodeNames]);
+
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
@@ -129,6 +136,12 @@ const App = () => {
     },
     [screenToFlowPosition, setNodes],
   );
+
+  // keep node names in zustand state
+  useEffect(() => {
+    const names = nodes.map((n) => n.data.label);
+    setNodeNames(names);
+  }, [nodes, setNodeNames]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -169,7 +182,7 @@ const App = () => {
 
   return (
     <div className="dndflow">
-      <Header/>
+      <Header onSave={onSave} onLoad={onLoad} onExport={onExport}/>
       <div style={{display: 'flex', height: 'calc(100vh - 60px)'}}>
         <Sidebar />
         <div className="reactflow-wrapper" style={{ width: '100%' }}>
