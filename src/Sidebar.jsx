@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaArrowCircleRight, FaArrowCircleLeft, FaCog } from 'react-icons/fa';
+import { Button } from './components/ui/button';
 
 const Sidebar = () => {
   const onDragStart = (event, nodeType, data) => {
@@ -32,8 +33,8 @@ const Sidebar = () => {
       >
         <FaArrowCircleLeft /> Output
       </div>
+      <Button className="mt-4 w-full">Shadcn Button</Button>
     </aside>
   );
 };
-
 export default Sidebar;
