@@ -52,8 +52,12 @@ const App = () => {
   const [edges, setEdges] = useEdgesState([]);
   const copiedNodesRef = useRef([]);
   const { screenToFlowPosition, getNodes, setNodes: setFlowNodes, setEdges: setFlowEdges } = useReactFlow();
-  const setNodeNames = useNodeStore((state) => state.setNodeNames);
-  const nodeNames = useNodeStore((state) => state.nodeNames);
+  // Remove setNodeNames and nodeNames
+  // const setNodeNames = useNodeStore((state) => state.setNodeNames);
+  // const nodeNames = useNodeStore((state) => state.nodeNames);
+  const addNodeToStore = useNodeStore((state) => state.addNode);
+  const getAllNodesFromStore = useNodeStore((state) => state.getAllNodes);
+  const clearNodesFromStore = useNodeStore((state) => state.clearNodes);
 
   // const onNodeLabelChange = useCallback((id, newLabel) => {
   //   setNodes((nds) =>
@@ -95,9 +99,11 @@ const App = () => {
     }
   }, [setFlowNodes, setFlowEdges]);
 
+  // Update onExport to export the new node structure
   const onExport = useCallback(() => {
-    console.log(JSON.stringify(nodeNames));
-  }, [nodeNames]);
+    const allNodes = getAllNodesFromStore();
+    console.log(JSON.stringify(allNodes));
+  }, [getAllNodesFromStore]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -137,11 +143,22 @@ const App = () => {
     [screenToFlowPosition, setNodes],
   );
 
-  // keep node names in zustand state
+  // Update effect to sync nodes to zustand store
   useEffect(() => {
-    const names = nodes.map((n) => n.data.label);
-    setNodeNames(names);
-  }, [nodes, setNodeNames]);
+    // Clear the store and re-add all nodes from the local state
+    clearNodesFromStore();
+    nodes.forEach((n) => {
+      addNodeToStore({
+        node_id: n.id,
+        node_name: n.data.label,
+        node_type: n.type,
+        connect_to: [], // You may want to populate this based on your edge data
+        connect_from: [], // You may want to populate this based on your edge data
+        instructions: '', // Populate as needed
+        tools: [], // Populate as needed
+      });
+    });
+  }, [nodes, addNodeToStore, clearNodesFromStore]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
