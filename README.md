@@ -26,7 +26,7 @@ A Draw.io-style visual editor built with React Flow to help Agent Architects des
     git clone https://github.com/akashmitra/drawai-agent.git
     cd drawai-agent
     npm install
-    npm start
+    npm run dev
 
 ## 🧩 Planned Features
 
