@@ -39,7 +39,7 @@ header {
   margin-right: 5px;
 }
 
-.dndflow {
+.smithflow {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -51,7 +51,7 @@ header {
   overflow: hidden;
 }
 
-.dndflow aside {
+.smithflow aside {
   width: 200px;
   border-right: 1px solid #e0e0e0;
   padding: 15px;
@@ -59,13 +59,13 @@ header {
   flex-shrink: 0;
 }
 
-.dndflow aside .description {
+.smithflow aside .description {
   margin-bottom: 20px;
   font-size: 0.9em;
   color: #555;
 }
 
-.dndflow .dndnode {
+.smithflow .smithnode {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -73,10 +73,9 @@ header {
   display: flex;
   align-items: center;
   cursor: grab;
-  background-color: #f9f9f9;
 }
 
-.dndflow .dndnode svg {
+.smithflow .smithnode svg {
   margin-right: 10px;
 }
 
@@ -92,7 +91,6 @@ header {
 .custom-node {
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #fff;
   padding: 8px 15px;
   font-size: 16px;
   display: flex;

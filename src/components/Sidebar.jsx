@@ -1,5 +1,7 @@
 import React from 'react';
-import { FaArrowCircleRight, FaArrowCircleLeft, FaCog } from 'react-icons/fa';
+
+import { VscPlayCircle, VscStopCircle, VscTools } from "react-icons/vsc";
+import { GiRobotAntennas, GiMinions, GiHiveMind } from "react-icons/gi";
 
 const Sidebar = () => {
   const onDragStart = (event, nodeType, data) => {
@@ -12,26 +14,48 @@ const Sidebar = () => {
     <aside>
       <div className="description">Drag nodes to the canvas</div>
       <div
-        className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Input', icon: 'FaArrowCircleRight' })}
+        className="smithnode  bg-red-200"
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Start' })}
         draggable
       >
-        <FaArrowCircleRight /> Input
+        <VscPlayCircle /> Start
       </div>
       <div
-        className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Process', icon: 'FaCog' })}
+        className="smithnode  bg-red-200"
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'End' })}
         draggable
       >
-        <FaCog /> Process
+        <VscStopCircle /> End
       </div>
       <div
-        className="dndnode"
-        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Output', icon: 'FaArrowCircleLeft' })}
+        className="smithnode bg-blue-200"
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Agent' })}
         draggable
       >
-        <FaArrowCircleLeft /> Output
+        <GiRobotAntennas /> Agent
       </div>
+      <div
+        className="smithnode bg-amber-200"
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Supervisor' })}
+        draggable
+      >
+        <GiMinions /> Supervisor
+      </div>
+      <div
+        className="smithnode bg-purple-200"
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Team' })}
+        draggable
+      >
+        <GiHiveMind /> Team
+      </div>
+      <div
+        className="smithnode bg-emerald-200"
+        onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Tools' })}
+        draggable
+      >
+        <VscTools /> Tools
+      </div>
+
     </aside>
   );
 };

@@ -14,33 +14,31 @@ import { FaArrowCircleRight, FaArrowCircleLeft, FaCog } from 'react-icons/fa';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import CustomNode from './components/CustomNode';
-// import NodeHeaderDemo from './NodeHeaderDemo';
 import useNodeStore from './utils/store';
 
 const initialNodes = [
   {
     id: '1',
     type: 'CustomNode',
-    data: { label: 'Input', icon: <FaArrowCircleRight /> },
+    data: { label: 'Start', icon: <FaArrowCircleRight /> },
     position: { x: 250, y: 5 },
   },
   {
     id: '2',
     type: 'CustomNode',
-    data: { label: 'This is a very long process name that will wrap to multiple lines', icon: <FaCog /> },
+    data: { label: 'Agent', icon: <FaCog /> },
     position: { x: 250, y: 150 },
   },
   {
     id: '3',
     type: 'CustomNode',
-    data: { label: 'Output', icon: <FaArrowCircleLeft /> },
+    data: { label: 'End', icon: <FaArrowCircleLeft /> },
     position: { x: 250, y: 300 },
   },
 ];
 
 const nodeTypes = {
   CustomNode: CustomNode,
-  // nodeHeaderNode: NodeHeaderDemo,
 };
 
 const iconMap = {
@@ -200,7 +198,7 @@ const App = () => {
 
 
   return (
-    <div className="dndflow">
+    <div className="smithflow">
       <Header onSave={onSave} onLoad={onLoad} onExport={onExport}/>
       <div style={{display: 'flex', height: 'calc(100vh - 60px)'}}>
         <Sidebar />
@@ -216,6 +214,7 @@ const App = () => {
             nodeTypes = {nodeTypes}
             fitViewOptions={{ maxZoom: 1 }}
             deleteKeyCode={['Backspace', 'Delete']}
+            className='bg-teal-50'
           >
             <Controls />
             <Background variant="dots" gap={12} size={1} />

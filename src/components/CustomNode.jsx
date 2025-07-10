@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Handle } from 'reactflow';
-import { FaEdit } from 'react-icons/fa';
+
+import { VscPlayCircle, VscStopCircle, VscTools } from "react-icons/vsc";
+import { GiRobotAntennas, GiMinions, GiHiveMind } from "react-icons/gi";
 
 const CustomNode = ({ data, id, onNodeLabelChange, selected }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -44,10 +46,28 @@ const CustomNode = ({ data, id, onNodeLabelChange, selected }) => {
     }, 0);
   };
 
+  const iconMap = {
+    Start: <VscPlayCircle />,
+    End: <VscStopCircle />,
+    Team: <GiHiveMind />,
+    Agent: <GiRobotAntennas />,
+    Tools: <VscTools />,
+    Supervisor: <GiMinions />,
+  };
+
   return (
-    <div className={`custom-node ${selected ? 'selected-node' : ''}`}>
+    <div className={`custom-node ${selected ? 'selected-node' : ''} 
+      ${label === 'Agent' ? 'bg-blue-200' : ''}
+      ${label === 'Start' ? 'bg-red-200' : ''}
+      ${label === 'End' ? 'bg-red-200' : ''}
+      ${label === 'Supervisor' ? 'bg-amber-200' : ''}
+      ${label === 'Tools' ? 'bg-emerald-200' : ''}
+      ${label === 'Team' ? 'bg-purple-200' : ''}
+      ` }>
+
       <div className="node-header">
-        {data.icon}
+        {iconMap[label] || null}
+
         <div className="label-container">
           {isEditing ? (
             <input
@@ -60,13 +80,14 @@ const CustomNode = ({ data, id, onNodeLabelChange, selected }) => {
               className="node-label-input"
             />
           ) : (
-            <span onDoubleClick={startEditing} className="node-label-text">{label}</span>
+            <span onDoubleClick={startEditing} className="node-label-text">
+              {label}
+            </span>
           )}
         </div>
-        {/* <FaEdit onClick={startEditing} className="edit-icon" /> */}
       </div>
-      {data.label !== 'Output' && <Handle type="source" position="bottom" />}
-      {data.label !== 'Input' && <Handle type="target" position="top" />}
+      {data.label !== 'End' && <Handle type="source" position="bottom" />}
+      {data.label !== 'Start' && <Handle type="target" position="top" />}
     </div>
   );
 };
