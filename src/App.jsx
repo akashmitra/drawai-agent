@@ -11,10 +11,11 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { FaArrowCircleRight, FaArrowCircleLeft, FaCog } from 'react-icons/fa';
 
-import Sidebar from './Sidebar';
-import Header from './Header';
-import CustomNode from './CustomNode';
-import useNodeStore from './store';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import CustomNode from './components/CustomNode';
+// import NodeHeaderDemo from './NodeHeaderDemo';
+import useNodeStore from './utils/store';
 
 const initialNodes = [
   {
@@ -39,6 +40,7 @@ const initialNodes = [
 
 const nodeTypes = {
   CustomNode: CustomNode,
+  // nodeHeaderNode: NodeHeaderDemo,
 };
 
 const iconMap = {
