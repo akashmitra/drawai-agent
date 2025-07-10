@@ -58,8 +58,8 @@ const CustomNode = ({ data, id, onNodeLabelChange, selected }) => {
   return (
     <div className={`custom-node ${selected ? 'selected-node' : ''} 
       ${label === 'Agent' ? 'bg-blue-200' : ''}
-      ${label === 'Start' ? 'bg-red-200' : ''}
-      ${label === 'End' ? 'bg-red-200' : ''}
+      ${label === 'Start' ? 'bg-rose-200' : ''}
+      ${label === 'End' ? 'bg-stone-200' : ''}
       ${label === 'Supervisor' ? 'bg-amber-200' : ''}
       ${label === 'Tools' ? 'bg-emerald-200' : ''}
       ${label === 'Team' ? 'bg-purple-200' : ''}

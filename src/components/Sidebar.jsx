@@ -14,14 +14,14 @@ const Sidebar = () => {
     <aside>
       <div className="description">Drag nodes to the canvas</div>
       <div
-        className="smithnode  bg-red-200"
+        className="smithnode  bg-rose-200"
         onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'Start' })}
         draggable
       >
         <VscPlayCircle /> Start
       </div>
       <div
-        className="smithnode  bg-red-200"
+        className="smithnode  bg-stone-200"
         onDragStart={(event) => onDragStart(event, 'CustomNode', { label: 'End' })}
         draggable
       >
