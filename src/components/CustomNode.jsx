@@ -155,7 +155,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
       {/* If isAccordionOpen is true, show the accordion content */}
       {isAccordionOpen && (
         <div>
-          <div className={`accordion-content ${isAccordionOpen ? 'accordion-open' : ''}`}>
+          <div className={`pt-2 accordion-content ${isAccordionOpen ? 'accordion-open' : ''}`}>
             <div className="accordion-inner">
               <div className="accordion-body">
                 <div className="space-y-2">
@@ -167,11 +167,11 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
                     <span className="text-xs text-gray-600">Type:</span>
                     <span className="text-xs font-medium text-gray-800">{nodeType}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-xs text-gray-600">Description:</span>
+                  <div className="flex flex-col justify-between">
+                    <span className="pb-1 text-xs text-gray-600">Description:</span>
                     <span className="text-xs font-medium text-gray-800">
                       {isEditingDescription ? (
-                        <input
+                        <textarea
                           ref={descriptionInputRef}
                           type="text"
                           value={description}
@@ -182,7 +182,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
                           onClick={(e) => e.stopPropagation()}
                         />
                       ) : (
-                        <span onDoubleClick={startEditingDescription} className="node-label-text">
+                        <span onDoubleClick={startEditingDescription} className="node-label-text block w-40 break-words">
                           {description || nodeType}
                         </span>
                       )}
