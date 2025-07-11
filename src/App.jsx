@@ -7,14 +7,18 @@ import ReactFlow, {
   Background,
   useReactFlow,
   MiniMap,
+  getNodesBounds,
+  getViewportForBounds,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { FaArrowCircleRight, FaArrowCircleLeft, FaCog } from 'react-icons/fa';
+import { toPng } from 'html-to-image';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import CustomNode from './components/CustomNode';
 import useNodeStore from './utils/store';
+import downloadImage from './utils/export2png';
 
 const nodeTypes = {
   CustomNode: CustomNode,
@@ -59,15 +63,16 @@ const App = () => {
     updateNodeDescription(id, newDescription);
   }, [setNodes, updateNodeDescription]);
 
-  // Initialize nodes with callbacks
+  // Initialize nodes with callbacks and add to store
   useEffect(() => {
+    clearNodesFromStore();
     const initialNodes = [
       {
         id: '1001',
         type: 'CustomNode',
-        data: { 
-          label: 'Start', 
-          icon: <FaArrowCircleRight />, 
+        data: {
+          label: 'Start',
+          icon: <FaArrowCircleRight />,
           description: 'Start node',
           onNodeLabelChange,
           onNodeDescriptionChange
@@ -77,9 +82,9 @@ const App = () => {
       {
         id: '1002',
         type: 'CustomNode',
-        data: { 
-          label: 'Agent', 
-          icon: <FaCog />, 
+        data: {
+          label: 'Agent',
+          icon: <FaCog />,
           description: 'Agent node',
           onNodeLabelChange,
           onNodeDescriptionChange
@@ -89,9 +94,9 @@ const App = () => {
       {
         id: '1003',
         type: 'CustomNode',
-        data: { 
-          label: 'End', 
-          icon: <FaArrowCircleLeft />, 
+        data: {
+          label: 'End',
+          icon: <FaArrowCircleLeft />,
           description: 'End node',
           onNodeLabelChange,
           onNodeDescriptionChange
@@ -100,21 +105,42 @@ const App = () => {
       },
     ];
     setNodes(initialNodes);
-  }, [setNodes, onNodeLabelChange, onNodeDescriptionChange]);
+    // Add to store
+    initialNodes.forEach((n) => {
+      addNodeToStore({
+        node_id: n.id,
+        node_name: n.data.label,
+        node_type: n.type,
+        connect_to: [],
+        connect_from: [],
+        instructions: '',
+        tools: [],
+        description: n.data.description || '',
+      });
+    });
+  }, [setNodes, onNodeLabelChange, onNodeDescriptionChange, addNodeToStore, clearNodesFromStore]);
+
 
   const onSave = useCallback(async () => {
-    const flow = { nodes, edges };
+
+    const imageWidth = 1024;
+    const imageHeight = 768;
+
     try {
-      const response = await fetch('http://localhost:3001/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const nodesBounds = getNodesBounds(getNodes());
+      const viewport = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+
+      toPng(document.querySelector('.react-flow__viewport'), {
+        width: imageWidth,
+        height: imageHeight,
+        style: {
+          width: imageWidth,
+          height: imageHeight,
+          transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
         },
-        body: JSON.stringify(flow),
-      });
-      const data = await response.json();
-      console.log(data.message);
-      alert('Diagram saved!');
+      }).then(downloadImage);
+      console.log('Diagram saved!');
+
     } catch (error) {
       console.error('Error saving diagram:', error);
       alert('Error saving diagram.');
@@ -150,6 +176,7 @@ const App = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
+  // When a new node is dropped, add it to the store as well
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -165,16 +192,16 @@ const App = () => {
         x: event.clientX,
         y: event.clientY,
       });
-      
+
       // Generate a 4-digit ID for the new node
       const newNodeId = generateNodeId();
-      
+
       const newNode = {
         id: newNodeId,
         type,
         position,
-        data: { 
-          label: data.label, 
+        data: {
+          label: data.label,
           icon: iconMap[data.icon],
           description: data.label, // Default description to label
           onNodeLabelChange,
@@ -183,28 +210,22 @@ const App = () => {
       };
 
       setNodes((nds) => nds.concat(newNode));
+      // Add to store
+      addNodeToStore({
+        node_id: newNodeId,
+        node_name: data.label,
+        node_type: type,
+        connect_to: [],
+        connect_from: [],
+        instructions: '',
+        tools: [],
+        description: data.label,
+      });
     },
-    [screenToFlowPosition, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange],
+    [screenToFlowPosition, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange, addNodeToStore],
   );
 
-  // Update effect to sync nodes to zustand store
-  useEffect(() => {
-    // Clear the store and re-add all nodes from the local state
-    clearNodesFromStore();
-    nodes.forEach((n) => {
-      addNodeToStore({
-        node_id: n.id,
-        node_name: n.data.label,
-        node_type: n.type,
-        connect_to: [], // You may want to populate this based on your edge data
-        connect_from: [], // You may want to populate this based on your edge data
-        instructions: '', // Populate as needed
-        tools: [], // Populate as needed
-        description: n.data.description || '',
-      });
-    });
-  }, [nodes, addNodeToStore, clearNodesFromStore]);
-
+  // When copying nodes, add to store as well
   useEffect(() => {
     const handleKeyDown = (event) => {
       const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
@@ -234,6 +255,17 @@ const App = () => {
               onNodeLabelChange,
               onNodeDescriptionChange
             };
+            // Add to store
+            addNodeToStore({
+              node_id: newNode.id,
+              node_name: newNode.data.label,
+              node_type: newNode.type,
+              connect_to: [],
+              connect_from: [],
+              instructions: '',
+              tools: [],
+              description: newNode.data.description || '',
+            });
             return newNode;
           });
           setNodes((nds) => nds.concat(newNodes));
@@ -246,12 +278,12 @@ const App = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [getNodes, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange]);
+  }, [getNodes, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange, addNodeToStore]);
 
   return (
     <div className="smithflow">
-      <Header onSave={onSave} onLoad={onLoad} onExport={onExport}/>
-      <div style={{display: 'flex', height: 'calc(100vh - 60px)'}}>
+      <Header onSave={onSave} onLoad={onLoad} onExport={onExport} />
+      <div style={{ display: 'flex', height: 'calc(100vh - 60px)' }}>
         <Sidebar />
         <div className="reactflow-wrapper" style={{ width: '100%' }}>
           <ReactFlow
