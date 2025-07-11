@@ -31,6 +31,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
     setIsEditing(false);
     // Propagate change to the main state and store
     if (onNodeLabelChange && label !== data.label) {
+      console.log('Label changed:', label);
       onNodeLabelChange(id, label);
     }
   };

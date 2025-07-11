@@ -59,8 +59,9 @@ const App = () => {
     updateNodeDescription(id, newDescription);
   }, [setNodes, updateNodeDescription]);
 
-  // Initialize nodes with callbacks
+  // Initialize nodes with callbacks and add to store
   useEffect(() => {
+    clearNodesFromStore();
     const initialNodes = [
       {
         id: '1001',
@@ -100,7 +101,20 @@ const App = () => {
       },
     ];
     setNodes(initialNodes);
-  }, [setNodes, onNodeLabelChange, onNodeDescriptionChange]);
+    // Add to store
+    initialNodes.forEach((n) => {
+      addNodeToStore({
+        node_id: n.id,
+        node_name: n.data.label,
+        node_type: n.type,
+        connect_to: [],
+        connect_from: [],
+        instructions: '',
+        tools: [],
+        description: n.data.description || '',
+      });
+    });
+  }, [setNodes, onNodeLabelChange, onNodeDescriptionChange, addNodeToStore, clearNodesFromStore]);
 
   const onSave = useCallback(async () => {
     const flow = { nodes, edges };
@@ -150,6 +164,7 @@ const App = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
+  // When a new node is dropped, add it to the store as well
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -183,28 +198,22 @@ const App = () => {
       };
 
       setNodes((nds) => nds.concat(newNode));
+      // Add to store
+      addNodeToStore({
+        node_id: newNodeId,
+        node_name: data.label,
+        node_type: type,
+        connect_to: [],
+        connect_from: [],
+        instructions: '',
+        tools: [],
+        description: data.label,
+      });
     },
-    [screenToFlowPosition, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange],
+    [screenToFlowPosition, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange, addNodeToStore],
   );
 
-  // Update effect to sync nodes to zustand store
-  useEffect(() => {
-    // Clear the store and re-add all nodes from the local state
-    clearNodesFromStore();
-    nodes.forEach((n) => {
-      addNodeToStore({
-        node_id: n.id,
-        node_name: n.data.label,
-        node_type: n.type,
-        connect_to: [], // You may want to populate this based on your edge data
-        connect_from: [], // You may want to populate this based on your edge data
-        instructions: '', // Populate as needed
-        tools: [], // Populate as needed
-        description: n.data.description || '',
-      });
-    });
-  }, [nodes, addNodeToStore, clearNodesFromStore]);
-
+  // When copying nodes, add to store as well
   useEffect(() => {
     const handleKeyDown = (event) => {
       const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
@@ -234,6 +243,17 @@ const App = () => {
               onNodeLabelChange,
               onNodeDescriptionChange
             };
+            // Add to store
+            addNodeToStore({
+              node_id: newNode.id,
+              node_name: newNode.data.label,
+              node_type: newNode.type,
+              connect_to: [],
+              connect_from: [],
+              instructions: '',
+              tools: [],
+              description: newNode.data.description || '',
+            });
             return newNode;
           });
           setNodes((nds) => nds.concat(newNodes));
@@ -246,7 +266,7 @@ const App = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [getNodes, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange]);
+  }, [getNodes, setNodes, generateNodeId, onNodeLabelChange, onNodeDescriptionChange, addNodeToStore]);
 
   return (
     <div className="smithflow">
