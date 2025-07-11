@@ -175,7 +175,13 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.react-flow__handle-bottom {
+  bottom: -3px !important;
+}
 
+.react-flow__handle-top {
+  top: -3px !important;
+}
 
 @layer base {
   :root {

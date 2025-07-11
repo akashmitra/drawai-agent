@@ -11,7 +11,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside>
+    <aside className="flex flex-col justify-between h-full">
       <div className="description">Drag nodes to the canvas</div>
       <div
         className="smithnode  bg-rose-200"
@@ -54,6 +54,14 @@ const Sidebar = () => {
         draggable
       >
         <VscTools /> Tools
+      </div>
+
+      {/* Spacer to push footer down */}
+      <div className="flex-grow" />
+
+      {/* Footer */}
+      <div className="mt-auto text-xs text-center text-gray-500 pt-4">
+        Created by Ony Mitra
       </div>
 
     </aside>
