@@ -29,7 +29,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
 
   const handleBlur = () => {
     setIsEditing(false);
-    // Propagate change to the main state
+    // Propagate change to the main state and store
     if (onNodeLabelChange && label !== data.label) {
       onNodeLabelChange(id, label);
     }
@@ -142,7 +142,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
-              <span onDoubleClick={startEditing} className="node-label-text">
+              <span onDoubleClick={startEditing} className="node-label-text text-sm">
                 {label}
               </span>
             )}
@@ -159,10 +159,10 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
             <div className="accordion-inner">
               <div className="accordion-body">
                 <div className="space-y-2">
-                  {/* <div className="flex justify-between">
+                  <div className="flex justify-between">
                     <span className="text-xs text-gray-600">ID:</span>
                     <span className="text-xs font-medium text-gray-800">{id}</span>
-                  </div> */}
+                  </div>
                   <div className="flex justify-between">
                     <span className="text-xs text-gray-600">Type:</span>
                     <span className="text-xs font-medium text-gray-800">{nodeType}</span>
