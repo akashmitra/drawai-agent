@@ -30,12 +30,16 @@ const iconMap = {
   FaCog: <FaCog />,
 };
 
+const flowKey = 'example-flow';
+
 const App = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [rfInstance, setRfInstance] = useState(null);
   const [edges, setEdges] = useEdgesState([]);
   const copiedNodesRef = useRef([]);
+  const { setViewport } = useReactFlow();
   const { screenToFlowPosition, getNodes, setNodes: setFlowNodes, setEdges: setFlowEdges } = useReactFlow();
-  
+
   const addNodeToStore = useNodeStore((state) => state.addNode);
   const getAllNodesFromStore = useNodeStore((state) => state.getAllNodes);
   const clearNodesFromStore = useNodeStore((state) => state.clearNodes);
@@ -148,23 +152,34 @@ const App = () => {
   }, [nodes, edges]);
 
   const onLoad = useCallback(async () => {
-    try {
-      const response = await fetch('http://localhost:3001/load');
-      const data = await response.json();
-      setFlowNodes(data.nodes || []);
-      setFlowEdges(data.edges || []);
-      alert('Diagram loaded!');
-    } catch (error) {
-      console.error('Error loading diagram:', error);
-      alert('Error loading diagram.');
-    }
-  }, [setFlowNodes, setFlowEdges]);
+    const restoreFlow = async () => {
+      const flow = JSON.parse(localStorage.getItem(flowKey));
+
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+
+    restoreFlow();
+
+  }, [setNodes, setViewport]);
 
   // Update onExport to export the new node structure
+  // const onExport = useCallback(() => {
+  //   const allNodes = getAllNodesFromStore();
+  //   console.log('Store Export (JSON):', JSON.stringify(allNodes, null, 2));
+  // }, [getAllNodesFromStore]);
+
   const onExport = useCallback(() => {
-    const allNodes = getAllNodesFromStore();
-    console.log('Store Export (JSON):', JSON.stringify(allNodes, null, 2));
-  }, [getAllNodesFromStore]);
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+      console.log('Exported flow:', JSON.stringify(flow));
+    }
+  }, [rfInstance]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -298,6 +313,7 @@ const App = () => {
             fitViewOptions={{ maxZoom: 1 }}
             deleteKeyCode={['Backspace', 'Delete']}
             className='bg-teal-50'
+            onInit={setRfInstance}
           >
             <Controls />
             <Background variant="dots" gap={12} size={1} />
