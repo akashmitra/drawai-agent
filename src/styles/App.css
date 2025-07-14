@@ -46,3 +46,26 @@
 .node-label-input, .node-label-text {
   width: 100%;
 }
+
+/* Handle Styles - Make dots bigger */
+.react-flow__handle {
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid #1a73e8 !important;
+  background: white !important;
+  border-radius: 50% !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-flow__handle:hover {
+  width: 16px !important;
+  height: 16px !important;
+  background: #1a73e8 !important;
+  border-color: #1a73e8 !important;
+  transform: scale(1.2) !important;
+}
+
+.react-flow__handle:active {
+  background: #1557b0 !important;
+  border-color: #1557b0 !important;
+}
