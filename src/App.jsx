@@ -109,6 +109,7 @@ const App = () => {
       },
     ];
     setNodes(initialNodes);
+    
     // Add to store
     initialNodes.forEach((n) => {
       addNodeToStore({
@@ -225,6 +226,7 @@ const App = () => {
       };
 
       setNodes((nds) => nds.concat(newNode));
+      
       // Add to store
       addNodeToStore({
         node_id: newNodeId,

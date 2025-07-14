@@ -25,6 +25,10 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
 
   const handleLabelChange = (e) => {
     setLabel(e.target.value);
+    console.log('e value:', e);
+
+    // Update the store using the node ID
+    // updateNodeLabel(id, label);
   };
 
   const handleBlur = () => {
