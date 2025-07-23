@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Handle } from 'reactflow';
 
 import { VscPlayCircle, VscStopCircle, VscTools } from "react-icons/vsc";
 import { GiRobotAntennas, GiMinions, GiHiveMind } from "react-icons/gi";
 
-const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, selected }) => {
+const CustomNode = ({ data, id, setNodes, selected }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [label, setLabel] = useState(data.label);
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
@@ -25,19 +26,18 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
 
   const handleLabelChange = (e) => {
     setLabel(e.target.value);
-    console.log('e value:', e);
-
-    // Update the store using the node ID
-    // updateNodeLabel(id, label);
   };
 
   const handleBlur = () => {
     setIsEditing(false);
-    // Propagate change to the main state and store
-    if (onNodeLabelChange && label !== data.label) {
-      console.log('Label changed:', label);
-      onNodeLabelChange(id, label);
-    }
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === id) {
+          return { ...node, data: { ...node.data, label } };
+        }
+        return node;
+      })
+    );
   };
 
   const handleKeyDown = (e) => {
@@ -67,9 +67,14 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
 
   const handleDescriptionBlur = () => {
     setIsEditingDescription(false);
-    if (onNodeDescriptionChange && description !== (data.description || '')) {
-      onNodeDescriptionChange(id, description);
-    }
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === id) {
+          return { ...node, data: { ...node.data, description } };
+        }
+        return node;
+      })
+    );
   };
 
   const handleDescriptionKeyDown = (e) => {
@@ -145,6 +150,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
                 onKeyDown={handleKeyDown}
                 className="node-label-input"
                 onClick={(e) => e.stopPropagation()}
+                autoFocus
               />
             ) : (
               <span onDoubleClick={startEditing} className="node-label-text text-sm">
@@ -185,6 +191,7 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
                           onKeyDown={handleDescriptionKeyDown}
                           className="node-label-input"
                           onClick={(e) => e.stopPropagation()}
+                          autoFocus
                         />
                       ) : (
                         <span onDoubleClick={startEditingDescription} className="node-label-text block w-40 break-words">
@@ -205,3 +212,5 @@ const CustomNode = ({ data, id, onNodeLabelChange, onNodeDescriptionChange, sele
 };
 
 export default CustomNode;
+
+
